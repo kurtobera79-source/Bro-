@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="tl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bro listen, look at this.</title>
+    <style>
+        body {margin:0;padding:0;background:linear-gradient(#ffe4e1,#ff69b4);font-family:'Comic Sans MS',cursive;display:flex;justify-content:center;align-items:center;height:100vh;overflow:hidden;}
+        .container {width:380px;height:520px;background:white;border-radius:25px;box-shadow:0 15px 35px rgba(255,105,180,0.3);position:relative;overflow:hidden;}
+        .question-container,.result-container {position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:all 0.5s;}
+        .result-container {display:none;}
+        img {width:220px;height:220px;margin-bottom:20px;border-radius:20px;}
+        h2 {color:#ff1493;font-size:28px;margin:10px 0;}
+        .button-container {display:flex;gap:25px;position:relative;}
+        button {padding:15px 35px;font-size:22px;border:none;border-radius:50px;cursor:pointer;transition:all 0.3s;}
+        .yes-btn {background:#ff1493;color:white;}
+        .no-btn {background:#ddd;color:#333;}
+        .no-btn:active {transform:scale(0.8);}
+        #force-message {font-size:24px;color:#ff1493;margin-top:20px;display:none;text-align:center;}
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- QUESTION PART - Gojo asking -->
+    <div class="question-container" id="question">
+        <img src="https://media3.giphy.com/media/v1.Y2lkPTZjMDliOTUyM2wxNnhtb24wOWlxa2NpdTM2N25lYTgyOTVuY2luc2xndXMwdGI1byZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/iNPNqI81MvDQ4D4n6D/giphy.gif" alt="Are You Gay?">
+        <h2>Are You Gay?</h2>
+        
+        <div class="button-container">
+            <button class="yes-btn" id="yesBtn">Yes ^^</button>
+            <button class="no-btn" id="noBtn">No 🧐</button>
+        </div>
+        
+        <div id="force-message">Walang kawala sa Yes! 😏❤️</div>
+    </div>
+
+    <!-- RESULT PART - Gojo happy -->
+    <div class="result-container" id="result">
+        <img src="https://media0.giphy.com/media/v1.Y2lkPTZjMDliOTUyd2JoY2JjOHczbjV2YjFpbzFrcTBmNjhpdTVvaWo0ZDI1YzVjMWV4eiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/mhfqfSii6aBk3AUWY3/giphy.gif" alt="I knew it!">
+        <h2>I knew it! 😏 "from:kurt" </h2>
+    </div>
+</div>
+
+<script>
+    const yesBtn = document.getElementById('yesBtn');
+    const noBtn = document.getElementById('noBtn');
+    const questionDiv = document.getElementById('question');
+    const resultDiv = document.getElementById('result');
+    const forceMsg = document.getElementById('force-message');
+
+    let attempts = 0;
+
+    yesBtn.addEventListener('click', () => {
+        questionDiv.style.display = 'none';
+        resultDiv.style.display = 'flex';
+    });
+
+    // Dodge + shrink on hover and click (works on phone touch)
+    noBtn.addEventListener('mouseover', shrinkAndMove);
+    noBtn.addEventListener('click', shrinkAndMove);
+    noBtn.addEventListener('touchstart', shrinkAndMove); // Extra for phone
+
+    function shrinkAndMove() {
+        attempts++;
+        
+        // Paliit ng paliit + gumagalaw
+        const newScale = Math.max(0.15, 1 - attempts * 0.12); // Hanggang 0.15 lang (super tiny)
+        noBtn.style.transform = `scale(${newScale})`;
+        noBtn.style.opacity = Math.max(0.3, 1 - attempts * 0.1);
+        
+        // Tumatakas pa rin
+        const container = document.querySelector('.container');
+        const maxX = container.offsetWidth - noBtn.offsetWidth * newScale - 30;
+        const maxY = container.offsetHeight - noBtn.offsetHeight * newScale - 180;
+        const randomX = Math.random() * maxX;
+        const randomY = Math.random() * maxY;
+        
+        noBtn.style.position = 'absolute';
+        noBtn.style.left = randomX + 'px';
+        noBtn.style.top = randomY + 'px';
+
+        // Pag masyadong maliit na (after ~8 clicks)
+        if (attempts >= 8 || newScale <= 0.2) {
+            noBtn.style.display = 'none';
+            forceMsg.style.display = 'block';
+            
+            // Auto Yes after 2 seconds (mapipilitan talaga!)
+            setTimeout(() => {
+                questionDiv.style.display = 'none';
+                resultDiv.style.display = 'flex';
+            }, 2000);
+        }
+    }
+</script>
+
+</body>
+</html>
